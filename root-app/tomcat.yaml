@@ -12,6 +12,9 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+    - PruneLast=true
+    - CreateNamespace=true
   source:
     chart: tomcat
     repoURL: 'https://charts.bitnami.com/bitnami'

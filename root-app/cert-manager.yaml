@@ -10,8 +10,11 @@ spec:
     server: 'https://kubernetes.default.svc'
   syncPolicy:
     automated:
-      prune: true
-      selfHeal: true
+      prune: false
+      selfHeal: false
+    syncOptions:
+    - PruneLast=true
+    - CreateNamespace=true
   source:
     chart: cert-manager
     repoURL: 'https://charts.jetstack.io'
@@ -19,13 +22,4 @@ spec:
     helm:
       releaseName: cert-manager
       values: |+
-        global:
-          logLevel: 2
-        ingressShim:
-          defaultIssuerName: letsencrypt
-          defaultIssuerKind: ClusterIssuer
         installCRDs: true
-        prometheus:
-          enabled: true
-          servicemonitor:
-            enabled: true
