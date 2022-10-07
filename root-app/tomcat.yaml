@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: tomcat
+spec:
+  project: default
+  destination:
+    namespace: tomcat
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    chart: tomcat
+    repoURL: 'https://charts.bitnami.com/bitnami'
+    targetRevision: v10.3.9
