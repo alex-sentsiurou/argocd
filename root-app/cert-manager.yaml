@@ -13,7 +13,6 @@ spec:
       prune: false
       selfHeal: false
     syncOptions:
-    - PruneLast=true
     - CreateNamespace=true
   source:
     chart: cert-manager
