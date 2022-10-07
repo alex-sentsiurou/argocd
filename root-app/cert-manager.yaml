@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: cert-manager
+spec:
+  project: default
+  destination:
+    namespace: cert-manager
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    chart: cert-manager
+    repoURL: 'https://charts.jetstack.io'
+    targetRevision: v1.9.1
+    helm:
+      releaseName: cert-manager
+      values: |+
+        global:
+          logLevel: 2
+        ingressShim:
+          defaultIssuerName: letsencrypt
+          defaultIssuerKind: ClusterIssuer
+        installCRDs: true
+        prometheus:
+          enabled: true
+          servicemonitor:
+            enabled: true
