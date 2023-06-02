@@ -1,0 +1,57 @@
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sleep infinity
+    env_file: .env
+    volumes:
+      - ..:/workspace:cached
+
+  mongo:
+    image: bitnami/mongodb:4.0
+    restart: unless-stopped
+    environment:
+      MONGODB_REPLICA_SET_MODE: primary
+      MONGODB_ADVERTISED_HOSTNAME: mongo
+    network_mode: service:app
+    volumes:
+      - mongodata:/bitnami
+    ports:
+      - 27017:27017
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.4
+    restart: unless-stopped
+    environment:
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      cluster.routing.allocation.disk.watermark.flood_stage: 99%
+      cluster.routing.allocation.disk.watermark.high: 99%
+      cluster.routing.allocation.disk.watermark.low: 95%
+    network_mode: service:app
+    ports:
+      - 9200:9200
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    mem_limit: 512m
+
+  #ftp:
+  # image: stilliard/pure-ftpd
+  #  ports:
+  #    - 21:21
+  #    - 30000-30009:30000-30009
+  #  volumes:
+  #    - ftpdata:/home/admin
+  #  environment:
+  #    PUBLICHOST: ftp
+  #    FTP_USER_NAME: admin
+  #    FTP_USER_PASS: admin
+  #    FTP_USER_HOME: /home/admin
+  #  restart: always
+
+#volumes:
+  #mongodata:
+  #esdata:
+  #  driver: local
+  #ftpdata:
